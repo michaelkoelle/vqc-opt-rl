@@ -10,25 +10,30 @@ from matplotlib import rc
 mpl.use("Agg")
 
 # Apply the default theme
-sns.set_theme()
-sns.set_style("whitegrid")
-sns.color_palette("colorblind")
-#plt.rcParams['text.usetex'] = True
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = ['Computer Modern Roman']
-sns.set(rc={'figure.figsize':(8.775,6.2025)})
-#sns.set(rc={'figure.figsize':(7.605,5.3755)})
 
-#plt.rcParams["text.usetex"] = True
-#rc("font", **{"family": "serif", "serif": ["Computer Modern"]})
-#rc("text", usetex=True)
+# sns.set(rc={"figure.figsize": (8.775, 6.2025)})
+# sns.set(rc={'figure.figsize':(7.605,5.3755)}) #smaller size for multiplots
+
+# plt.rcParams["text.usetex"] = True
+# rc("font", **{"family": "serif", "serif": ["Computer Modern"]})
+# rc("text", usetex=True)
 
 
 # plot final results
 
 
 def plot_test_avg_final(
-    results_dir, plot_dir, gym_id, exp_names, seeds, alpha, max_steps, namelabels, batchsize=512, settitle=False, title="none"
+    results_dir,
+    plot_dir,
+    gym_id,
+    exp_names,
+    seeds,
+    alpha,
+    max_steps,
+    namelabels,
+    batchsize=512,
+    settitle=False,
+    title="none",
 ):
     # get all result directories
     results_dirs = []
@@ -54,7 +59,7 @@ def plot_test_avg_final(
 
     for df in up_res_df_list:
         for i in range(np.size(exp_names)):
-            df.loc[df['exp_name'] == exp_names[i], 'exp_name'] = namelabels[i]
+            df.loc[df["exp_name"] == exp_names[i], "exp_name"] = namelabels[i]
 
     ep_res_by_seed_list = [
         avg_over_update_of_episodic_results(df, gym_id, exp_name, seed, batchsize, max_steps)
@@ -73,20 +78,20 @@ def plot_test_avg_final(
 
     up_res_by_seed = pd.concat(up_res_by_seed_ema_list, ignore_index=True)
 
-    #ep_res_by_exp_name_list = [
+    # ep_res_by_exp_name_list = [
     #    avg_over_seeds_of_avg_over_update_of_episodic_results(
     #        df, gym_id, exp_name, 512, max_steps, alpha
     #    )
     #    for df, exp_name in zip(ep_res_by_seed_list, dir_exp_names)
-    #]
-    #ep_res_by_exp_name = pd.concat(ep_res_by_exp_name_list, ignore_index=True)
+    # ]
+    # ep_res_by_exp_name = pd.concat(ep_res_by_exp_name_list, ignore_index=True)
 
-    #up_res_by_exp_name_list = [
+    # up_res_by_exp_name_list = [
     #    avg_over_seeds_of_update_results(df, gym_id, exp_name, batchsize, max_steps, alpha)
     #    for df, exp_name in zip(up_res_df_list, dir_exp_names)
-    #]
+    # ]
 
-    #up_res_by_exp_name = pd.concat(up_res_by_exp_name_list, ignore_index=True)
+    # up_res_by_exp_name = pd.concat(up_res_by_exp_name_list, ignore_index=True)
 
     # check if plot_dir exists
     pathExists = os.path.exists(plot_dir)
@@ -95,27 +100,26 @@ def plot_test_avg_final(
 
     # plotting
 
-    plot_avg_episode_reward_by_seed(ep_res_by_seed, plot_dir)
+    # plot_avg_episode_reward_by_seed(ep_res_by_seed, plot_dir)
     plot_avg_episode_reward_by_exp_name(ep_res_by_seed, plot_dir, settitle, title)
-    plot_avg_episode_length_by_seed(ep_res_by_seed, plot_dir)
-    plot_avg_episode_length_by_exp_name(ep_res_by_seed, plot_dir, settitle, title)
+    # plot_avg_episode_length_by_seed(ep_res_by_seed, plot_dir)
+    # plot_avg_episode_length_by_exp_name(ep_res_by_seed, plot_dir, settitle, title)
 
-
-
-    plot_learning_rate_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
+    # plot_learning_rate_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
     plot_qlearning_rate_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
-    #plot_value_loss_by_exp_name(up_res_by_seed, plot_dir)
-    #plot_policy_loss_by_exp_name(up_res_by_seed, plot_dir)
-    #plot_entropy_by_seed(up_res_by_seed, plot_dir)
-    plot_entropy_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
-    #plot_loss_by_exp_name(up_res_by_seed, plot_dir)
-    #plot_old_approx_kl_by_seed(up_res_by_seed, plot_dir)
-    #plot_approx_kl_by_seed(up_res_by_seed, plot_dir)
-    #plot_clipfrac_by_seed(up_res_by_seed, plot_dir)
-    #plot_explained_variance_by_seed(up_res_by_seed, plot_dir)
+    # plot_value_loss_by_exp_name(up_res_by_seed, plot_dir)
+    # plot_policy_loss_by_exp_name(up_res_by_seed, plot_dir)
+    # plot_entropy_by_seed(up_res_by_seed, plot_dir)
+    # plot_entropy_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
+    # plot_loss_by_exp_name(up_res_by_seed, plot_dir)
+    # plot_old_approx_kl_by_seed(up_res_by_seed, plot_dir)
+    # plot_approx_kl_by_seed(up_res_by_seed, plot_dir)
+    # plot_clipfrac_by_seed(up_res_by_seed, plot_dir)
+    # plot_explained_variance_by_seed(up_res_by_seed, plot_dir)
     plot_SPS_by_seed(up_res_by_seed, plot_dir)
     plot_output_scaleing_by_seed(up_res_by_seed, plot_dir)
     plot_output_scaleing_by_exp_name(up_res_by_seed, plot_dir, settitle, title)
+
 
 ##################################################################################
 ##################################################################################
@@ -165,6 +169,7 @@ def ema_for_plotting_by_seed_of_episodic_results(df, alpha):
     df["episode_length"] = df["avg_episode_length_per_update"].ewm(alpha=alpha).mean()
     return df
 
+
 def ema_for_plotting_det_results(df, alpha):
     df["reward"] = df["det_score"].ewm(alpha=alpha).mean()
     df["episode_length"] = df["det_episode_length"].ewm(alpha=alpha).mean()
@@ -173,8 +178,8 @@ def ema_for_plotting_det_results(df, alpha):
 
 def avg_over_seeds_of_avg_over_update_of_episodic_results(
     df, gym_id, exp_name, batchsize, max_steps, alpha
-):  
-    
+):
+
     avg_rewards = []
     avg_lengths = []
     avg_global_step = []
@@ -273,29 +278,30 @@ def plot_avg_episode_reward_by_seed(episode_results, plot_dir):
         hue="seed",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Ergebnis")
-    #g.set(xlabel ="Globaler Schritt", ylabel = "Reward", title ='some title')
+    g.set(xlabel="Steps", ylabel="Reward")
+    # g.set(xlabel ="Globaler Schritt", ylabel = "Reward", title ='some title')
     plot_dir = os.path.join(plot_dir, "episode_reward_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
 
 
 def plot_avg_episode_reward_by_exp_name(episode_results, plot_dir, settitle, title):
-    g=sns.lineplot(
+    g = sns.lineplot(
         data=episode_results,
         x="global_step",
         y="reward",
         errorbar="sd",
         hue="exp_name",
+        linewidth=2,
     )
     # Placing the legend inside the plot
-    plt.legend(title='Ansatz', loc='lower right')
-    g.set(xlabel ="Zeitschritt", ylabel = "Ergebnis")
-    if(settitle):
+    plt.legend(title="Approach", loc="lower right")
+    g.set(xlabel="Steps", ylabel="Reward")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
-    plot_dir = os.path.join(plot_dir, "episode_reward_by_exp_name.png")
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
+    plot_dir = os.path.join(plot_dir, "episode_reward_by_exp_name.pdf")
     plt.savefig(plot_dir)
     plt.close()
 
@@ -311,14 +317,14 @@ def plot_avg_episode_length_by_seed(episode_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Episodenlänge")
+    g.set(xlabel="Steps", ylabel="Episodenlänge")
     plot_dir = os.path.join(plot_dir, "episode_lenght_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
 
 
 def plot_avg_episode_length_by_exp_name(episode_results, plot_dir, settitle, title):
-    g=sns.lineplot(
+    g = sns.lineplot(
         data=episode_results,
         x="global_step",
         y="episode_length",
@@ -326,12 +332,12 @@ def plot_avg_episode_length_by_exp_name(episode_results, plot_dir, settitle, tit
         hue="exp_name",
     )
     # Placing the legend inside the plot
-    plt.legend(title='Ansatz', loc='upper right')
-    g.set(xlabel ="Zeitschritt", ylabel = "Episodenlänge")
-    if(settitle):
+    plt.legend(title="Approach", loc="lower right")
+    g.set(xlabel="Steps", ylabel="Episodenlänge")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "episode_lenght_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -348,7 +354,7 @@ def plot_learning_rate_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Actor NN Lernrate")
+    g.set(xlabel="Steps", ylabel="Actor NN Lernrate")
     plot_dir = os.path.join(plot_dir, "learning_rate_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -363,12 +369,12 @@ def plot_learning_rate_by_exp_name(update_results, plot_dir, settitle, title):
         hue="exp_name",
     )
     # Placing the legend inside the plot
-    plt.legend(title='Ansatz', loc='upper right')
-    g.set(xlabel ="Zeitschritt", ylabel = "Actor NN Lernrate")
-    if(settitle):
+    plt.legend(title="Approach", loc="upper right")
+    g.set(xlabel="Steps", ylabel="Actor NN Lernrate")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "learning_rate_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -385,7 +391,7 @@ def plot_qlearning_rate_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Actor VQC Lernrate")
+    g.set(xlabel="Steps", ylabel="Actor VQC Lernrate")
     plot_dir = os.path.join(plot_dir, "qlearning_rate_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -397,16 +403,17 @@ def plot_qlearning_rate_by_exp_name(update_results, plot_dir, settitle, title):
         x="global_step",
         y="qlearning_rate",
         errorbar="sd",
+        linewidth=2,
         hue="exp_name",
     )
     # Placing the legend inside the plot
-    plt.legend(title='Ansatz', loc='upper right')
-    g.set(xlabel ="Zeitschritt", ylabel = "Actor VQC Lernrate")
-    if(settitle):
+    plt.legend(title="Approach", loc="upper right")
+    g.set(xlabel="Steps", ylabel="Learning Rate (VQC)")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
-    plot_dir = os.path.join(plot_dir, "qlearning_rate_by_exp_name.png")
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
+    plot_dir = os.path.join(plot_dir, "qlearning_rate_by_exp_name.pdf")
     plt.savefig(plot_dir)
     plt.close()
 
@@ -422,7 +429,7 @@ def plot_value_loss_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Value Loss")
+    g.set(xlabel="Steps", ylabel="Value Loss")
     plot_dir = os.path.join(plot_dir, "value_loss_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -437,10 +444,10 @@ def plot_value_loss_by_exp_name(update_results, plot_dir):
         errorbar="sd",
         hue="exp_name",
     )
-    g._legend.set_title("Ansatz")
-    g.set(xlabel ="Zeitschritt", ylabel = "Value Loss")
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    g._legend.set_title("Approach")
+    g.set(xlabel="Steps", ylabel="Value Loss")
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "value_loss_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -457,7 +464,7 @@ def plot_policy_loss_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Policy Loss")
+    g.set(xlabel="Steps", ylabel="Policy Loss")
     plot_dir = os.path.join(plot_dir, "policy_loss_by.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -472,10 +479,10 @@ def plot_policy_loss_by_exp_name(update_results, plot_dir):
         errorbar="sd",
         hue="exp_name",
     )
-    g._legend.set_title("Ansatz")
-    g.set(xlabel ="Zeitschritt", ylabel = "Policy Loss")
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    g._legend.set_title("Approach")
+    g.set(xlabel="Steps", ylabel="Policy Loss")
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "policy_loss_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -492,7 +499,7 @@ def plot_entropy_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Entropie")
+    g.set(xlabel="Steps", ylabel="Entropie")
     plot_dir = os.path.join(plot_dir, "entropy_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -507,12 +514,12 @@ def plot_entropy_by_exp_name(update_results, plot_dir, settitle, title):
         errorbar="sd",
         hue="exp_name",
     )
-    g._legend.set_title("Ansatz")
-    g.set(xlabel ="Zeitschritt", ylabel = "Entropie")
-    if(settitle):
+    g._legend.set_title("Approach")
+    g.set(xlabel="Steps", ylabel="Entropie")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "entropy_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -529,7 +536,7 @@ def plot_loss_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Loss")
+    g.set(xlabel="Steps", ylabel="Loss")
     plot_dir = os.path.join(plot_dir, "loss_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -544,10 +551,10 @@ def plot_loss_by_exp_name(update_results, plot_dir):
         errorbar="sd",
         hue="exp_name",
     )
-    g._legend.set_title("Ansatz")
-    g.set(xlabel ="Zeitschritt", ylabel = "Loss")
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    g._legend.set_title("Approach")
+    g.set(xlabel="Steps", ylabel="Loss")
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "loss_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -628,7 +635,7 @@ def plot_SPS_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Zeitschritte pro Sekunde")
+    g.set(xlabel="Steps", ylabel="Stepse pro Sekunde")
     plot_dir = os.path.join(plot_dir, "SPS_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -645,7 +652,7 @@ def plot_output_scaleing_by_seed(update_results, plot_dir):
         errorbar="sd",
     )
     g._legend.set_title("Seed")
-    g.set(xlabel ="Zeitschritt", ylabel = "Output Scaleing")
+    g.set(xlabel="Steps", ylabel="Output Scaleing")
     plot_dir = os.path.join(plot_dir, "output_scaleing_by_seed.png")
     plt.savefig(plot_dir)
     plt.close()
@@ -660,14 +667,12 @@ def plot_output_scaleing_by_exp_name(update_results, plot_dir, settitle, title):
         hue="exp_name",
     )
     # Placing the legend inside the plot
-    plt.legend(title='Ansatz', loc='upper left')#, bbox_to_anchor=(0.5, 0.5)
-    g.set(xlabel ="Zeitschritt", ylabel = "Output Scaleing")
-    if(settitle):
+    plt.legend(title="Approach", loc="upper left")  # , bbox_to_anchor=(0.5, 0.5)
+    g.set(xlabel="Steps", ylabel="Output Scaleing")
+    if settitle:
         g.set(title=title)
-    #for t, l in zip(g._legend.texts, labels):
-        #t.set_text(l)
+    # for t, l in zip(g._legend.texts, labels):
+    # t.set_text(l)
     plot_dir = os.path.join(plot_dir, "output_scaleing_by_exp_name.png")
     plt.savefig(plot_dir)
     plt.close()
-
-
