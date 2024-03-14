@@ -1,85 +1,77 @@
-**"Optimierung von Variational Quantum Circuits für Hybride Quantum Proximal Policy Optimization Algorithmen" von Timo Witter** 
-=
-**Dieses Git-Repository unfasst die folgenden Dateien und Verzeichnisse:**
+# A Study on Optimization Techniques for Variational Quantum Circuits in Reinforcement Learning
 
-- jobs:
-    - job.sh
-        >Wird für "run-jobs.sh" benötigt und erstellt eine pyenv für die Tests
-    - run-jobs.sh           
-        >Dient zum Ausführen der slurm-Aufrufe, mit denen die Algorithmen auf den Rechnern des LRZ ausgeführt wurden
+This GitHub repository includes the following files and directories:
 
-- plots
-    >Enthält die mithilfe von "plot_log.py" erstellten Plots, welche in der Arbeit verwendet wurden
+- `jobs`:
 
-- qppo-slurm
-    >Enthält die Checkpoints und Ergebnisse aller durchgeführten runs
+  - `job.sh`
+    - Required by `run-jobs.sh` and sets up a pyenv for testing.
+  - `run-jobs.sh`
+    - Executes slurm commands to run the algorithms on LRZ's computing resources.
 
-- src
-    >Enthält die Python files des Algorihmus:
-    - agent.py
-        >Logik des Agenten (Actor und Critic) und er Nauronalen Netzwerke
-    - args.py
-        >Übergeben der hyperparameter
-    - calc_num_param.py
-        >berechnet die Anzahl der Parameter des Actor und Critic zu rein informativen zwecken
-    - circuits.py
-        >Implementierung der verschiedenen Schaltkreise
-    - env.setup.py
-        >Initialisierungsfunktion der einzelnen Umgebungen für die multi-vector-environment
-    - envs_storage.py
-        >Funktionen zur Speicherung von Umgebungsdaten für ein eventuelles Fortsetzen des Lernprozees
-    - layer_params.py
-        >Initialisierung der Parameter der Schaltkreise
-    - main.py
-        >Ausführbare Datei mit der Kernlogik des (Quantum) Proximal Policy Optimization Algorithmus
-    - plot_grads.py
-        >Funktionen für das Plotten von Gradienten
-    - plot_old.py
-        >Alte Plotfunktionen, welche für einen simplen abschließenden Plot in "main.py" eingesetzt werden
-    - plot.py
-        >Überarbeitete Plotfunktionen, welche für die Auswertung der Testergebnisse verwendet wurden
-    - save_params.py
-        >Funktionen zum Speichern der Parameter des Schaltkreises (Speichern der NN Parameter in "agent.py")
-    - save_results.py
-        >Funktionen zu abspeichern der Ergebnisse
-    - ShortestPathFrozenLake.py
-        >Veränderte Frozen Lake Umgebung mit dense Reward
-    - transform_funks.py
-        >Normalisierungs- und Kodierungsfunktionen für den Schaltkreis
-    - utils.py
-        >Funktionen zur Bestimmung der Dimensionalitäten der Umgebung
+- `plots`
 
-- plot_log.py
-    >Ausführbare Datei mit allen Funktionsaufrufen, die zur Erstellung der Plots verwendet wurden
+  - Contains plots created with `plot_log.py` used in the paper.
 
-- run_log.txt
-    >Auflistung aller Slurm-Aufrufe, die (innerhalb von "run-jobs.sh") eingesetzt wurden um die Testergebnisse zu produzieren
+- `qppo-slurm`
 
+  - Checkpoints and results from all runs.
 
+- `src`
 
+  - Contains the Python files of the algorithm:
+    - `agent.py` - Logic of the agent (Actor and Critic) and neural networks.
+    - `args.py` - Passes hyperparameters.
+    - `calc_num_param.py` - Calculates the number of parameters for the Actor and Critic for informational purposes.
+    - `circuits.py` - Implementation of different circuits.
+    - `env.setup.py` - Initialization function for individual environments for the multi-vector-environment.
+    - `envs_storage.py` - Functions to store environment data for potential continuation of the learning process.
+    - `layer_params.py` - Initialization of circuit parameters.
+    - `main.py` - Executable file with the core logic of the (Quantum) Proximal Policy Optimization algorithm.
+    - `plot_grads.py` - Functions for plotting gradients.
+    - `plot_old.py` - Old plotting functions used for a simple final plot in `main.py`.
+    - `plot.py` - Revised plotting functions used for evaluating test results.
+    - `save_params.py` - Functions for saving circuit parameters (storing NN parameters in `agent.py`).
+    - `save_results.py` - Functions for saving results.
+    - `ShortestPathFrozenLake.py` - Modified Frozen Lake environment with dense reward.
+    - `transform_funks.py` - Normalization and encoding functions for the circuit.
+    - `utils.py` - Functions for determining the dimensions of the environment.
 
-**Ausführen des Algorithmus:**
->Um den PPO in einer Umgebung des OpenAI Gym (wie Cart Pole) trainieren zu lassen muss z.B. ein `$ python src/main.py --gym-id CartPole-v1` Aufruf ausgeführt werden. Um mehrere Seeds parallel über Slurm durchzuführen werden stattdessen in "jobs/run-jobs.sh" mehrere Aufrufe von "jobs/jobs.sh" (mit den entsprechenden argparse Argumenten) hinterlegt (und mit `$ jobs/run-jobs.sh` gestartet).
+- `plot_log.py`
 
-**Hyperparameter Einstellungen mit argparse**
->Es gibt eine vielzahl an weiteren Hyperparametern, welche in der Kommandozeile übergeben werden können. Diese können mit dem `python src/main.py --help` Befehl oder in "src/args.py" eingesehen werden. Da die dies schnell unübersichtlich wird haben wir in "run_log.txt" alle von uns (in "jobs/run-jobs.sh") ausgeführten slurm-commands aufgelistet.
+  - Executable file with all function calls used to create the plots.
 
-**Requirements:**
->Die in "requirements.txt" aufgeführten Requirements sollten beim Ausführen von `jobs/jobs.sh` automatisch installiert werden. Der Algorithmus wurde nur für Cart Pole und Frozen Lake getestet und braucht für andere Umgebungen vermutlich Anpassungen.
+- `run_log.txt`
+  - List of all slurm commands used within `run-jobs.sh` to produce the test results.
 
-**Checkpoints:**
->Der Algorithmus speichert in festen Intervallen alle Ergebnisse und Parameter mit deren Hilfe ein Durchlauf auch nach Ablauf der angegebenen Umgebungsschritte oder nach einem Absturz fortgesetzt werden kann. Für Frozen Lake war es ebenfalls möglich den Zustand der Multi Vector Environment wiederherzustellen, für Cart Pole ist uns das leider nicht gelungen und wir mussten nach jeder Wiederherstellung die Umgebungen neu initialisieren. Um einen existierenden Checkpoint zu laden muss der exakt selbe Funktionsaufruf erneut ausgeführt werden, nur dass `--load-chkpt` auf `True` gesetzt werden muss und für `--total-timesteps` ein größerer Wert eingesetzt werden kann.
+## Running the Algorithm
 
->**Verwendung der Checkpoints in unserer Arbeit und der Einfluss auf die Reproduzierbarkeit:**
->>Obwohl es nicht perfekt ist, war das Checkpointsystem für unsere Tests in Cart Pole unumgänglich, da die Durchläufe (bei Verwendung des Actor VQC) in der Regel etwa 3 Tage duerten. Die meisten Runs in dieser Umgebung wurden (nur bei Verwendung des Actor VQC) erst einmal für 150000 Zeitschritte angetestet und danach vom Checkpoint aus auf 500000 Schritte ausgeweitet. Im Falle von Node-Fails des Slurm Systems wurde der Verlauf ebenfalls vom letzten Checkpoint aus fortgesetzt, um den Lernfortschritt nicht zu verlieren. Die SPS (Steps per Second) Plots sollten einen guten überblick darüber schaffen, wann neugestartet wurde, da bei jedem Neustart ein Spike auftritt. Empirisch gesehen sollte der Einfluss eines solchen Neustarts auf die Durchschnittliche Leistung des (Quantum) PPOs vernachlässigbar sein, da der Algorihmus seine Lernzyklen ohnehin voneinander unabhängig in festen Zeitintervallen ausführt und nur "On Policy" Daten (aus dem letzten Lernintervall) verwenden und somit kein Lernfortschritt verloren geht. Der einzige Unterschied besteht daher darin, dass der Zufallsgenerator resetted wird und die im schlimmsten Fall die Endphase eines vielversprechenden Durchlaufs (für jede der n Parrallelen Umgebungen) nicht beobachtet werden kann. Da über die Dauer von 500000 Zeitschritten mindestens 1000 (im Durchschnitt ungefähr 1500 bis 2000) Episoden durchlaufen werden sollte der Einfluss des Resetts also relativ gering sein. Im Hinblick auf die Reproduzierbarkeit wollen wir dies jedoch trotzdem erwähnt haben.
+To train the PPO in an OpenAI Gym environment (like Cart Pole), execute `$ python src/main.py --gym-id CartPole-v1`. To run multiple seeds in parallel via slurm, place multiple calls to `jobs/job.sh` (with the appropriate argparse arguments) in `jobs/run-jobs.sh` and start with `$ jobs/run-jobs.sh`.
 
-**Plots**
->Um die Testergebnisse zu Plotten wird `src.plot.plot_test_avg_final("qppo-slurm/results", "plots", gym_id, exp_names, seeds, alpha, max_steps, labels)` ausgeführt, wobei gilt:
->- `gym_id` ist die id der Gym Umgebung des Tests.
->- `exp_name` ist eine Liste mit den Namen der Experimente, die geplotted werden sollen. 
->- `seeds` ist eine Liste mit den Seeds die eingesetzt wurden.
->- `alpha` ist der alpha wert für das ewm (exponentially weighted moveing average).
->- `max_steps` ist die Azahl der Zeitschritte über die geplotted werden soll
->- `labels` ist eine Liste mit Namenskürzeln, die für die Legende verwendet werden sollen (in der selben Reihenfolge wie `exp_name`).
->In "plot_log.py" haben wir alle von uns verwendeten aufrufe der Funktion aufgelistet.
+## Hyperparameter Settings with argparse
 
+A wide range of additional hyperparameters can be passed via the command line. These can be viewed with the `python src/main.py --help` command or in `src/args.py`. Since this can quickly become confusing, we have listed all the slurm-commands we executed (in `jobs/run-jobs.sh`) in `run_log.txt`.
+
+## Requirements
+
+The requirements listed in `requirements.txt` should be automatically installed when running `jobs/job.sh`. The algorithm has only been tested for Cart Pole and Frozen Lake and may require adjustments for other environments.
+
+## Checkpoints
+
+The algorithm saves all results and parameters at fixed intervals, which allows a run to be continued after the specified number of environment steps have passed or after a crash. For Frozen Lake, it was also possible to restore the state of the Multi Vector Environment. Unfortunately, for Cart Pole, we had to reinitialize the environments after each restoration. To load an existing checkpoint, the exact same function call must be executed again, but `--load-chkpt` must be set to `True` and a larger value can be used for `--total-timesteps`.
+
+### Use of Checkpoints in our work
+
+Although not perfect, the checkpoint system was indispensable for our tests in Cart Pole, as runs (using the Actor VQC) typically lasted about 3 days. Most runs in this environment were initially tested for 150,000 timesteps and then extended from the checkpoint to 500,000 steps. In case of node failures in the Slurm system, the process was also continued from the last checkpoint to avoid losing learning progress. The SPS (Steps per Second) plots should provide a good overview of when restarts occurred, as each restart results in a spike. Empirically, the impact of such a restart on the average performance of the (Quantum) PPO should be negligible, since the algorithm independently executes its learning cycles at fixed time intervals and only uses "On Policy" data (from the last learning interval), so no learning progress is lost. The only difference is that the random number generator is reset, and in the worst case, the final phase of a promising run (for each of the n parallel environments) cannot be observed. Given that over the course of 500,000 timesteps at least 1,000 (on average about 1,500 to 2,000) episodes are run, the impact of the reset should be relatively small. However, we wanted to mention this in terms of reproducibility.
+
+## Plots
+
+To plot the test results, run `src.plot.plot_test_avg_final("qppo-slurm/results", "plots", gym_id, exp_names, seeds, alpha, max_steps, labels)`, where:
+
+- `gym_id` is the id of the Gym environment of the test.
+- `exp_name` is a list of the names of the experiments to be plotted.
+- `seeds` is a list of the seeds that were used.
+- `alpha` is the alpha value for the EWM (Exponentially Weighted Moving Average).
+- `max_steps` is the number of timesteps over which to plot.
+- `labels` is a list of name abbreviations to be used for the legend (in the same order as `exp_name`).
+  All the function calls we used are listed in `plot_log.py`.
