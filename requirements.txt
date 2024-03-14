@@ -1,0 +1,13 @@
+black==23.3.0
+isort==5.12.0
+pipreqs==0.4.13
+autograd
+gymnasium
+pennylane
+torch
+torchvision
+torchaudio
+pandas
+seaborn
+tensorboard
+
